@@ -1,0 +1,33 @@
+#+title: TODO
+
+* TODO Run the server from lisp
+
+** TODO Monitor the process output and interface with it
+
+** TODO Monitor resource usage of the process
+
+There are three main ways of doing this:
+
+- Using the OS's resource management
+- Using JMX
+- Using a mod/plugin
+
+While the JMX approach is the one that will give us access to the most useful information, there doesn't seem to exist any way of using it outside of Java, so using it would mean having a small Java program that would report the usage to lisp or implementing it in c or in lisp as a library.
+
+The mod/plugin approach is also plausible but maintaining one for each server/mod loader seems like a pain in the ass, also this won't be possible in vanilla Minecraft servers.
+
+* TODO Enumerate commands using ~/help~
+
+* TODO Provision and configure servers
+
+Provide a streamlined way of provisioning and configuring servers
+
+** TODO Parsing and modifying configuration
+
+* TODO Logging
+
+Add a logger
+
+** TODO Parse and log Minecraft errors
+
+* TODO Maybe add a web interface for management
