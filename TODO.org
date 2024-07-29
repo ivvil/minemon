@@ -36,4 +36,6 @@ Add a logger
 
 ** TODO Parse and log Minecraft errors
 
+** TODO Use query api to get server stats
+
 * TODO Maybe add a web interface for management

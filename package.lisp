@@ -1,4 +1,4 @@
 ;;;; package.lisp
 
 (defpackage #:dev.shft.minemon
-  (:use #:cl #:bt-semaphore))
+  (:use #:cl #:bt-semaphore #:org.shirakumo.machine-state))
