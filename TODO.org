@@ -24,6 +24,12 @@ Provide a streamlined way of provisioning and configuring servers
 
 ** TODO Parsing and modifying configuration
 
+** TODO Downloading and managing java
+
+** TODO Downloading and managing Minecraft
+
+*** TODO Downloading and managing mods/modpacks
+
 * TODO Logging
 
 Add a logger
