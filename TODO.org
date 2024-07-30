@@ -39,3 +39,5 @@ Add a logger
 ** TODO Use query api to get server stats
 
 * TODO Maybe add a web interface for management
+
+* TODO A way to configure the server based on sexps

@@ -9,4 +9,7 @@
   :depends-on (:bt-semaphore
 			   :machine-state)			;Needs shirakumo dist installed
   :components ((:file "package")
-               (:file "minemon")))
+               (:file "minemon")
+			   (:file "config")
+			   (:file "system")
+			   (:file "minecraft-watchdog")))
