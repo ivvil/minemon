@@ -7,8 +7,7 @@
   :version "0.0.1"
   :serial t
   :depends-on (:bt-semaphore
-			   :machine-state			;Needs shirakumo dist installed
-			   :cl-sconf)			
+			   :machine-state)			;Needs shirakumo dist installed			
   :components ((:file "package")
                (:file "minemon")
 			   (:file "config")
