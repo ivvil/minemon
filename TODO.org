@@ -24,6 +24,10 @@ Provide a streamlined way of provisioning and configuring servers
 
 ** TODO Parsing and modifying configuration
 
+*** TODO Create a way to create config values, set defaults and querry config programatically
+
+*** TODO Figure a way to model the config for instances
+
 ** TODO Downloading and managing java
 
 ** TODO Downloading and managing Minecraft
@@ -31,8 +35,6 @@ Provide a streamlined way of provisioning and configuring servers
 *** TODO Downloading and managing mods/modpacks
 
 * TODO Logging
-
-Add a logger
 
 ** TODO Parse and log Minecraft errors
 

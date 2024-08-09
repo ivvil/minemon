@@ -8,7 +8,9 @@
   :serial t
   :depends-on (:bt-semaphore
 			   :machine-state			;Needs shirakumo dist installed
-			   :uiop)						
+			   :uiop
+			   :cxml
+			   :drakma)						
   :components ((:file "package")
                (:file "minemon")
 			   (:file "config")
