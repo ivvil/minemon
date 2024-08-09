@@ -2,7 +2,7 @@
 
 (in-package #:dev.shft.minemon)
 
-(defparameter *javatest-path* #P"JavaTest.java ")
+(defparameter *javatest-path* (asdf:system-relative-pathname "minemon" "JavaTest.java"))
 
 (defclass java-install ()
   ((name
@@ -24,6 +24,15 @@
 (defmethod java-version ((java java-install))
   )
 
+(defun compile-javatest ()
+  (launch-program `("javac"
+					"-source" "8"
+					"-target" "8"
+					"-Xlint:-options"
+					"-d" ,(princ-to-string uiop:*temporary-directory*)
+					,(princ-to-string *javatest-path*)))
+  (merge-pathnames uiop:*temporary-directory* (make-pathname :name "JavaTest" :type "class")))
+
 (defun java-paths-linux ()
   )
 
@@ -35,12 +44,16 @@
 		(ht (make-hash-table :test 'equal)))
 	(loop for entry in (xpath:evaluate "//entry" sysprop-xmls))))
 
-(defun parse-java-system-properties-to-hashtable (sysprop-stream)
+
+;; Not downloading the DTD speeds up this thing a lot, if I need it I could cache it so it only waits for it on the first try
+(defun parse-java-system-properties-to-hashtable (sysprop-stream) ;TODO Add a way of passing a list of keys to optimize search
+  ;; (declare (optimize (speed 3) (safety 0)))
   (let ((ht (make-hash-table :test 'equal))
 		(doc (cxml:make-source sysprop-stream :entity-resolver (lambda (pubid sysid)
-																 (declare (ignore pubid))
-																 (when (eq (puri:uri-scheme sysid) :http)
-																   (drakma:http-request sysid :want-stream t))))))
+																 (declare (ignore pubid sysid))
+																 ;; (when (eq (puri:uri-scheme sysid) :http)
+																 ;;   (drakma:http-request sysid :want-stream t))
+																 (flexi-streams:make-in-memory-input-stream nil)))))
 	(loop
 	  for key = (klacks:peek doc)
 	  while key
