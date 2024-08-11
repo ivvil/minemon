@@ -2,7 +2,7 @@
 
 (in-package #:dev.shft.minemon)
 
-(defparameter *javatest-path* (asdf:system-relative-pathname "minemon" "JavaTest.java"))
+(defparameter *javatest-path* (asdf:system-relative-pathname "minemon" "JavaTest.jar"))
 
 (defclass java-install ()
   ((name
@@ -10,6 +10,7 @@
 	:initform "java"
 	:accessor name)
    (arch
+	:initarg :arch
 	:initform "unknown"
 	:accessor arch)
    (path
@@ -24,29 +25,40 @@
 (defmethod java-version ((java java-install))
   )
 
-(defun compile-javatest ()
-  (launch-program `("javac"
+(defun compile-to-jar (javafile)
+  (run-program `("javac"
 					"-source" "8"
 					"-target" "8"
 					"-Xlint:-options"
 					"-d" ,(princ-to-string uiop:*temporary-directory*)
 					,(princ-to-string *javatest-path*)))
+  (run-program `("jar"
+				 "cf"
+				 "-d" ,(princ-to-string uiop:*temporary-directory*)
+				 ,(princ-to-string *javatest-path*)))
   (merge-pathnames uiop:*temporary-directory* (make-pathname :name "JavaTest" :type "class")))
 
-(defun java-paths-linux ()
-  )
+(defun java-paths-linux ())
+
+(defun run-jar (java jar)
+  (launch-program `(,(path java)
+					"-jar"
+					,(princ-to-string jar))
+				  :output :stream))
+
+(defun run-javatest (java)
+  (run-jar java *javatest-path*))
+
+(defun get-java-sysprop (java)
+  (let* ((process (run-javatest java))
+		 (stream (process-info-output process)))
+	(parse-java-system-properties-to-hashtable stream)))
 
 (defun default-java ()
-  )
-
-(defun parse-java-system-properties-to-hashtable (sysprop-xmls)
-  (let ((xpath:*navigator* (cxml-xmls:make-xpath-navigator))
-		(ht (make-hash-table :test 'equal)))
-	(loop for entry in (xpath:evaluate "//entry" sysprop-xmls))))
-
+  (make-instance 'java-install :name "java" :arch "unknown" :path "java"))
 
 ;; Not downloading the DTD speeds up this thing a lot, if I need it I could cache it so it only waits for it on the first try
-(defun parse-java-system-properties-to-hashtable (sysprop-stream) ;TODO Add a way of passing a list of keys to optimize search
+(defun parse-java-system-properties-to-hashtable (sysprop-stream) ;TODO Add a way of passing a list of keys to optimize search (normally we only want 2 or 3 keys)
   ;; (declare (optimize (speed 3) (safety 0)))
   (let ((ht (make-hash-table :test 'equal))
 		(doc (cxml:make-source sysprop-stream :entity-resolver (lambda (pubid sysid)

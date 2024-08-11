@@ -15,4 +15,5 @@
                (:file "minemon")
 			   (:file "config")
 			   (:file "system")
-			   (:file "minecraft-watchdog")))
+			   (:file "minecraft-watchdog")
+			   (:file "java")))
