@@ -32,3 +32,7 @@
   plist)
 
 
+(defun parse-instances (instances-plist)
+  (mapcar (lambda (plist)
+			(apply #'make-instance 'minecraft-instance plist))
+		  instances-plist))
