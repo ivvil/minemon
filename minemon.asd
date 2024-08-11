@@ -16,4 +16,5 @@
 			   (:file "config")
 			   (:file "system")
 			   (:file "minecraft-watchdog")
-			   (:file "java")))
+			   (:file "java")
+			   (:file "instance")))
