@@ -20,7 +20,8 @@
 (defgeneric java-version (java))
 
 (defmethod java-version ((java string))
-  (if (string-prefix-p "1.")))
+  ;; (if (string-prefix-p "1."))
+  )
 
 (defmethod java-version ((java java-install))
   )

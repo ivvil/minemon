@@ -44,4 +44,6 @@
 					  ,javarg)
 					:output :stream)))
 
+(defmethod m-equal ((x minecraft-instance) (y minecraft-instance))
+  (string= (name x) (name y)))
 

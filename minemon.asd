@@ -15,6 +15,6 @@
                (:file "minemon")
 			   (:file "config")
 			   (:file "system")
-			   (:file "minecraft-watchdog")
+			   (:file "watchdog")
 			   (:file "java")
 			   (:file "instance")))
