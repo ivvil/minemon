@@ -5,6 +5,7 @@
 (defclass minecraft-instance ()
   ((name
     :initarg :name
+	:initform (error "An instance name must be provided for instance creation")
     :accessor name)
    (base-dir
     :initarg :base-dir

@@ -28,6 +28,28 @@ Provide a streamlined way of provisioning and configuring servers
 
 *** TODO Figure a way to model the config for instances
 
+*** TODO How to specify the java and minecraft jar to use from the ones managed by the application
+
+**** Java
+
+When we want to define the instance in the config we have to take into account 3 cases for declaring java
+
+- Providing a path to an external (non managed) java binary
+
+This option makes the config not portable, because it relies both on that the same java distribution and version is installed in another machine and that it will be installed in the same path.
+
+- Providing a java version
+
+This option gives us the chance of managing java dependencies in a portable way. If none of the installed javas are of the specified version we can download one and automatically use it.
+
+- Providing a java dist description
+
+This option also allows us to manage java portably, because if no installed javas match the description we can just download it.
+
+**** Minecraft
+
+Our final goal is to be able to download and install minecraft server binnaries (modded and unmodded) directly from the internet, but for right now the simplest way fordward is letting the user provide the binnaries.
+
 ** TODO Downloading and managing java
 
 ** TODO Downloading and managing Minecraft

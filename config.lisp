@@ -2,6 +2,8 @@
 
 (in-package #:dev.shft.minemon)
 
+(defconstant +user-home+ (user-homedir-pathname))
+
 (defvar *config* nil
   "The global configuration plist.")
 
@@ -31,8 +33,17 @@
         (setf plist (append plist (list key value)))))
   plist)
 
+;; (defun parse-instances (instances-plist)
+;;   (let ((instances (mapcar (lambda (plist)
+;; 							 (apply #'make-instance 'minecraft-instance plist))
+;; 						   instances-plist)))
+;; 	(dolist (instance instances)
+;; 	  (watch-instance instance))))
+
 
 (defun parse-instances (instances-plist)
   (mapcar (lambda (plist)
 			(apply #'make-instance 'minecraft-instance plist))
 		  instances-plist))
+
+
