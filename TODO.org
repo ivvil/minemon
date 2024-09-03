@@ -16,6 +16,48 @@ While the JMX approach is the one that will give us access to the most useful in
 
 The mod/plugin approach is also plausible but maintaining one for each server/mod loader seems like a pain in the ass, also this won't be possible in vanilla Minecraft servers.
 
+*** TODO Using the OS
+
+**** TODO CPU usage[fn:1]
+
+To figure out the CPU ussage of a process we will need several things:
+
+- The uptime ~/proc/uptime~
+- Clock speed of the system using either ~getconf~ or the ~sysconf~ c function
+- Several stats from ~/proc/[PID]/stat~
+
+The stats needed are:
+
+- ~utime~ CPU time spent in user code, measured in clock ticks
+- ~stime~ CPU time spent in kernel code, measured in clock ticks
+- ~cutime~ Waited-for children's CPU time spent in user code (in clock ticks)
+- ~cstime~ Waited-for children's CPU time spent in kernel code (in clock ticks)
+- ~startime~ Time when the process started, measured in clock ticks
+
+To get the total time spent on the process:
+
+\begin{displaymath}
+\text{total\_time} = \text{utime} + \text{stime}
+\end{displaymath}
+
+If we want to include time spent in children processes:
+
+\begin{displaymath}
+\text{total\_time} = \text{total\_time} + \test{cutime} + \text{cstime}
+\end{displaymath}
+
+Get the total time in seconds since the process started:
+
+\begin{displaymath}
+\text{seconds} = \text{uptime} - \left( \frac{\text{starttime}}{\text{Hertz}} \right)
+\end{displaymath}
+
+Get the CPU ussage percentage:
+
+\begin{displaymath}
+\text{cpu\_usage} = 100 \times \left( \frac{\left( \frac{\text{total\_time}}{\text{Hertz}} \right)}{\text{seconds}} \right)
+\end{displaymath}
+
 * TODO Enumerate commands using ~/help~
 
 * TODO Provision and configure servers
@@ -24,7 +66,7 @@ Provide a streamlined way of provisioning and configuring servers
 
 ** TODO Parsing and modifying configuration
 
-*** TODO Create a way to create config values, set defaults and querry config programatically
+*** DONE Create a way to create config values, set defaults and querry config programatically
 
 *** TODO Figure a way to model the config for instances
 
@@ -65,3 +107,7 @@ Our final goal is to be able to download and install minecraft server binnaries 
 * TODO Maybe add a web interface for management
 
 * TODO A way to configure the server based on sexps
+
+* Footnotes
+
+[fn:1] This only describes the process for posix like os's 

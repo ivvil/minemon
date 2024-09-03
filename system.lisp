@@ -15,3 +15,11 @@ INSTANCES is the ammount of instances to account for"
 
 (defun bytes-tog-gib (bytes)
   (/ bytes (expt 1024 3)))
+
+(defun get-uptime () ; FIXME Posix only
+  (let* ((uptime (read-file-string "/proc/uptime"))
+		 (space (position #\Space uptime)))
+	(cons (parse-float (subseq uptime space))
+		  (parse-float (subseq uptime 0 space)))))
+
+

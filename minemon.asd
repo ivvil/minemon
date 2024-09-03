@@ -10,7 +10,8 @@
 			   :machine-state			;Needs shirakumo dist installed
 			   :uiop
 			   :cxml
-			   :drakma)						
+			   :drakma
+			   :parse-float)						
   :components ((:file "package")
                (:file "minemon")
 			   (:file "config")
