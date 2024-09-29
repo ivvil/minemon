@@ -1,10 +1,12 @@
 #+title: TODO
+#+STARTUP: latexpreview
+#+TODO: TODO PROG REVW BLOK | DONE
 
-* TODO Run the server from lisp
+* PROG Run the server from lisp
 
 ** TODO Monitor the process output and interface with it
 
-** TODO Monitor resource usage of the process
+** PROG Monitor resource usage of the process
 
 There are three main ways of doing this:
 
@@ -19,12 +21,20 @@ The mod/plugin approach is also plausible but maintaining one for each server/mo
 *** TODO Using the OS
 
 **** TODO CPU usage[fn:1]
+:PROPERTIES:
+:Effort:   5h
+:END:
+:LOGBOOK:
+CLOCK: [2024-09-29 dom 19:38]--[2024-09-29 dom 20:01] =>  0:23
+CLOCK: [2024-09-29 dom 17:44]--[2024-09-29 dom 18:01] =>  0:17
+CLOCK: [2024-09-29 dom 16:42]--[2024-09-29 dom 16:45] =>  0:03
+:END:
 
 To figure out the CPU ussage of a process we will need several things:
 
 - The uptime ~/proc/uptime~
 - Clock speed of the system using either ~getconf~ or the ~sysconf~ c function
-- Several stats from ~/proc/[PID]/stat~
+- Several stats from ~/proc/[PID]/stat~ ([[https://www.man7.org/linux/man-pages/man5/proc_pid_stat.5.html][Description]])
 
 The stats needed are:
 
