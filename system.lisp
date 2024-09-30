@@ -46,76 +46,93 @@ INSTANCES is the ammount of instances to account for"
 
 (defun parse-stat-string (stat)
   (if stat
-  (let* ((start-comm (position #\( stat))  ; Find the opening parenthesis of the comm
-         (end-comm (position #\) stat))    ; Find the closing parenthesis of the comm
-         ;; Extract the process name (comm) inside parentheses
-         (comm (subseq stat (1+ start-comm) end-comm))
-         ;; Split the remaining stat string after the closing parenthesis
-         (prefix (subseq stat 0 start-comm))
-         (suffix (subseq stat (1+ end-comm)))
-         (fields (split-sequence #\Space (concatenate 'string prefix suffix))))
-    ;; Convert the fields to a vector for fast access
-    (let ((vec (coerce fields 'vector)))
-      ;; Create an instance of proc-pid-stat
-      (make-instance 'proc-pid-stat
-                     :pid (elt vec 0)
-                     :comm comm
-                     :state (parse-proc-state (elt (elt vec 2) 0))  ; 'state' is a char
-                     :ppid (elt vec 3)
-                     :pgrp (elt vec 4)
-                     :session (elt vec 5)
-                     :tty-nr (elt vec 6)
-                     :tpgid (elt vec 7)
-                     :flags (elt vec 8)
-                     :minflt (elt vec 9)
-                     :cminflt (elt vec 10)
-                     :majflt (elt vec 11)
-                     :cmajflt (elt vec 12)
-                     :utime (elt vec 13)
-                     :stime (elt vec 14)
-                     :cutime (elt vec 15)
-                     :cstime (elt vec 16)
-                     :priority (elt vec 17)
-                     :nice (elt vec 18)
-                     :threads (elt vec 19)
-                     :itrealvalue (elt vec 20)
-                     :starttime (elt vec 21)
-                     :vsize (elt vec 22)
-                     :rss (elt vec 23)
-                     :rsslim (elt vec 24)
-                     :startcode (elt vec 25)
-                     :endcode (elt vec 26)
-                     :startstack (elt vec 27)
-                     :kstkesp (elt vec 28)
-                     :kstkeip (elt vec 29)
-                     :signal (elt vec 30)
-                     :blocked (elt vec 31)
-                     :sigignore (elt vec 32)
-                     :sigcatch (elt vec 33)
-                     :wchan (elt vec 34)
-                     :nswap (elt vec 35)
-                     :cnswap (elt vec 36)
-                     :exit-signal (elt vec 37)
-                     :processor (elt vec 38)
-                     :rt-priority (elt vec 39)
-                     :policy (elt vec 40)
-                     :delayacct-blkio-ticks (elt vec 41)
-                     :guest-time (elt vec 42)
-                     :cguest-time (elt vec 43)
-                     :start-data (elt vec 44)
-                     :end-data (elt vec 45)
-                     :start-brk (elt vec 46)
-                     :arg-start (elt vec 47)
-                     :arg-end (elt vec 48)
-                     :env-start (elt vec 49)
-                     :env-end (elt vec 50)
-                     :exit-code (elt vec 51))))
-   (error "Invalid stat data, unable to parse.")))
-
+      (let* ((start-comm (position #\( stat))  ; Find the opening parenthesis of the comm
+             (end-comm (position #\) stat))    ; Find the closing parenthesis of the comm
+             ;; Extract the process name (comm) inside parentheses
+             (comm (subseq stat (1+ start-comm) end-comm))
+             ;; Split the remaining stat string after the closing parenthesis
+             (prefix (subseq stat 0 start-comm))
+             (suffix (subseq stat (1+ end-comm)))
+             (fields (split-sequence #\Space (concatenate 'string prefix suffix))))
+        ;; Convert the fields to a vector for fast access
+        (let ((vec (coerce fields 'vector)))
+          ;; Create an instance of proc-pid-stat
+          (make-instance 'proc-pid-stat
+                         :pid (parse-integer (elt vec 0))
+                         :comm comm
+                         :state (parse-proc-state (elt (elt vec 2) 0))  ; 'state' is a char
+                         :ppid (parse-integer (elt vec 3))
+                         :pgrp (parse-integer (elt vec 4))
+                         :session (parse-integer (elt vec 5))
+                         :tty-nr (parse-integer (elt vec 6))
+                         :tpgid (parse-integer (elt vec 7))
+                         :flags (parse-integer (elt vec 8))
+                         :minflt (parse-integer (elt vec 9))
+                         :cminflt (parse-integer (elt vec 10))
+                         :majflt (parse-integer (elt vec 11))
+                         :cmajflt (parse-integer (elt vec 12))
+                         :utime (parse-integer (elt vec 13))
+                         :stime (parse-integer (elt vec 14))
+                         :cutime (parse-integer (elt vec 15))
+                         :cstime (parse-integer (elt vec 16))
+                         :priority (parse-integer (elt vec 17))
+                         :nice (parse-integer (elt vec 18))
+                         :threads (parse-integer (elt vec 19))
+                         :itrealvalue (parse-integer (elt vec 20))
+                         :starttime (parse-integer (elt vec 21))
+                         :vsize (parse-integer (elt vec 22))
+                         :rss (parse-integer (elt vec 23))
+                         :rsslim (parse-integer (elt vec 24))
+                         :startcode (parse-integer (elt vec 25))
+                         :endcode (parse-integer (elt vec 26))
+                         :startstack (parse-integer (elt vec 27))
+                         :kstkesp (parse-integer (elt vec 28))
+                         :kstkeip (parse-integer (elt vec 29))
+                         :signal (parse-integer (elt vec 30))
+                         :blocked (parse-integer (elt vec 31))
+                         :sigignore (parse-integer (elt vec 32))
+                         :sigcatch (parse-integer (elt vec 33))
+                         :wchan (parse-integer (elt vec 34))
+                         :nswap (parse-integer (elt vec 35))
+                         :cnswap (parse-integer (elt vec 36))
+                         :exit-signal (parse-integer (elt vec 37))
+                         :processor (parse-integer (elt vec 38))
+                         :rt-priority (parse-integer (elt vec 39))
+                         :policy (parse-integer (elt vec 40))
+                         :delayacct-blkio-ticks (parse-integer (elt vec 41))
+                         :guest-time (parse-integer (elt vec 42))
+                         :cguest-time (parse-integer (elt vec 43))
+                         :start-data (parse-integer (elt vec 44))
+                         :end-data (parse-integer (elt vec 45))
+                         :start-brk (parse-integer (elt vec 46))
+                         :arg-start (parse-integer (elt vec 47))
+                         :arg-end (parse-integer (elt vec 48))
+                         :env-start (parse-integer (elt vec 49))
+                         :env-end (parse-integer (elt vec 50))
+                         :exit-code (parse-integer (elt vec 51)))))
+    (error "Invalid stat data, unable to parse.")))
 
 (defun get-stat-string (pid)
   (let ((stat-path (merge-pathnames (concatenate 'string (write-to-string pid) "/") "/proc/stat")))
 	(uiop:read-file-string stat-path :external-format :iso-8859-1)))
+
+(defun get-pid-stat (pid)
+  (parse-stat-string (get-stat-string pid)))
+
+(defun cpu-usage (pid-stat clock-speed uptime)
+  (let* ((total-time (/ (+ (utime pid-stat)
+                           (stime pid-stat)
+                           ;; (cutime pid-stat)
+                           ;; (cstime pid-stat)
+						   )
+                        clock-speed))  ; Convert from clock ticks to seconds
+         (seconds (- uptime
+                     (/ (starttime pid-stat)
+						clock-speed)))  ; Convert start time to seconds
+         (cpu-usage (/ (* total-time
+						  100)
+					   seconds)))  ; Percentage CPU usage
+    cpu-usage))
 
 (defclass proc-pid-stat ()
   ((pid

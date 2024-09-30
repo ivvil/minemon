@@ -2,6 +2,17 @@
 #+STARTUP: latexpreview
 #+TODO: TODO PROG REVW BLOK | DONE
 
+#+BEGIN: clocktable :scope file :maxlevel 2
+#+CAPTION: Clock summary at [2024-09-30 lun 19:27]
+| Headline                                  | Time   |      |
+|-------------------------------------------+--------+------|
+| *Total time*                              | *2:01* |      |
+|-------------------------------------------+--------+------|
+| Run the server from lisp                  | 2:01   |      |
+| \_  Monitor resource usage of the process |        | 2:01 |
+#+END:
+
+
 * PROG Run the server from lisp
 
 ** TODO Monitor the process output and interface with it
@@ -25,6 +36,7 @@ The mod/plugin approach is also plausible but maintaining one for each server/mo
 :Effort:   5h
 :END:
 :LOGBOOK:
+CLOCK: [2024-09-30 lun 19:29]--[2024-09-30 lun 20:43] =>  1:14
 CLOCK: [2024-09-30 lun 12:55]--[2024-09-30 lun 14:13] =>  1:18
 CLOCK: [2024-09-29 dom 19:38]--[2024-09-29 dom 20:01] =>  0:23
 CLOCK: [2024-09-29 dom 17:44]--[2024-09-29 dom 18:01] =>  0:17
