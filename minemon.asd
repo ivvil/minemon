@@ -11,7 +11,8 @@
 			   :uiop
 			   :cxml
 			   :drakma
-			   :parse-float)						
+			   :parse-float
+			   :split-sequence)						
   :components ((:file "package")
                (:file "minemon")
 			   (:file "config")

@@ -25,6 +25,7 @@ The mod/plugin approach is also plausible but maintaining one for each server/mo
 :Effort:   5h
 :END:
 :LOGBOOK:
+CLOCK: [2024-09-30 lun 12:55]--[2024-09-30 lun 14:13] =>  1:18
 CLOCK: [2024-09-29 dom 19:38]--[2024-09-29 dom 20:01] =>  0:23
 CLOCK: [2024-09-29 dom 17:44]--[2024-09-29 dom 18:01] =>  0:17
 CLOCK: [2024-09-29 dom 16:42]--[2024-09-29 dom 16:45] =>  0:03
