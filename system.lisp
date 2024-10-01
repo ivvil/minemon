@@ -134,6 +134,39 @@ INSTANCES is the ammount of instances to account for"
 					   seconds)))  ; Percentage CPU usage
     cpu-usage))
 
+(defun get-cpu-usage (pid)
+  (cpu-usage (get-pid-stat pid) (get-clk-tck) (cdr (get-uptime))))
+
+(cffi:defcenum sysconf-constants
+  (_SC_ARG_MAX 0)
+  (_SC_CHILD_MAX 1)
+  (_SC_CLK_TCK 2)  ;; On most systems, this is 2 but now determined by the C library
+  (_SC_OPEN_MAX 3)
+  (_SC_NGROUPS_MAX 4))
+
+(cffi:defcfun "sysconf" :long
+  (name sysconf-constants))
+
+(defun get-clk-tck ()
+  "Retrieve the number of clock ticks per second using sysconf."
+  (sysconf '_SC_CLK_TCK))
+
+(cffi:defcfun ("sysconf" get-page-size) :long
+  (name :int))
+
+(defun get-pagesize ()
+  "Retrieve the system's page size in bytes."
+  (get-page-size 30)) ;; 30 corresponds to _SC_PAGESIZE
+
+(defun get-ram-usage (pid)
+  "Get the RAM usage of the process with the given PID."
+  (let* ((statm-path (concatenate 'string "/proc/" (write-to-string pid) "/statm"))
+         (statm-string (with-open-file (stream statm-path :direction :input)
+						 (read-line stream)))
+		 (statm-data (mapcar #'parse-integer (split-sequence #\Space statm-string))))
+	(* (second statm-data)
+	   (get-pagesize))))
+
 (defclass proc-pid-stat ()
   ((pid
     :initarg :pid
