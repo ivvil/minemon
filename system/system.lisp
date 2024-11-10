@@ -1,6 +1,6 @@
 ;;;; system.lisp
 
-(in-package #:dev.shft.minemon)
+(in-package #:dev.shft.minemon.system)
 
 (defparameter *reserved-system-memory* 0.5
   "Percentage of memory that will be left for the system when calculating recommended memory sizes")
@@ -120,7 +120,9 @@ INSTANCES is the ammount of instances to account for"
   (parse-stat-string (get-stat-string pid)))
 
 (defun cpu-usage (pid-stat &optional clock-speed uptime)
-  (let* ((total-time (/ (+ (utime pid-stat)
+  (let* ((clock-speed (or clock-speed (get-clk-tck)))
+		 (uptime (or uptime (car (get-uptime))))
+		 (total-time (/ (+ (utime pid-stat)
                            (stime pid-stat)
                            ;; (cutime pid-stat)
                            ;; (cstime pid-stat)
@@ -135,7 +137,7 @@ INSTANCES is the ammount of instances to account for"
     cpu-usage))
 
 (defun get-cpu-usage (pid)
-  (cpu-usage (get-pid-stat pid) (get-clk-tck) (cdr (get-uptime))))
+  (cpu-usage (get-pid-stat pid)))
 
 (cffi:defcenum sysconf-constants
   (_SC_ARG_MAX 0)

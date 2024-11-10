@@ -13,7 +13,8 @@
 			   :drakma
 			   :parse-float
 			   :split-sequence
-			   :cffi)						
+			   :cffi
+			   :minemon-system)						
   :components ((:file "package")
                (:file "minemon")
 			   (:file "config")
