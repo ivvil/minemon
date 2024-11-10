@@ -119,7 +119,7 @@ INSTANCES is the ammount of instances to account for"
 (defun get-pid-stat (pid)
   (parse-stat-string (get-stat-string pid)))
 
-(defun cpu-usage (pid-stat clock-speed uptime)
+(defun cpu-usage (pid-stat &optional clock-speed uptime)
   (let* ((total-time (/ (+ (utime pid-stat)
                            (stime pid-stat)
                            ;; (cutime pid-stat)

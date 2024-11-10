@@ -17,7 +17,9 @@
 
 ** TODO Monitor the process output and interface with it
 
-** PROG Monitor resource usage of the process
+Log4J can output several different log formats, one of theme is json, which is simple to parse
+
+** DONE Monitor resource usage of the process
 
 There are three main ways of doing this:
 
