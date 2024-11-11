@@ -2,7 +2,7 @@
 
 (in-package #:dev.shft.minemon)
 
-(defparameter *javatest-path* (asdf:system-relative-pathname "minemon" "JavaTest.jar"))
+(defparameter *javatest-path* (asdf:system-relative-pathname "minemon" "bin/java/JavaTest.jar"))
 
 (defclass java-install ()
   ((name
@@ -50,15 +50,20 @@
 (defun run-javatest (java)
   (run-jar java *javatest-path*))
 
-(defun get-java-sysprop (java)
-  (let* ((process (run-javatest java))
-		 (stream (process-info-output process)))
-	(parse-java-system-properties-to-hashtable stream)))
+(defun get-java-sysprop (java-instance)
+  "Gets Java system properties for the given JAVA-INSTANCE."
+  (let* ((process (run-javatest java-instance))
+         (stream (process-info-output process)))
+    (if stream
+        (let ((hash (parse-java-system-properties-to-hashtable stream)))
+          (log:debug "Sysprop:" hash)
+          hash)  ; Return the hash for further use if needed
+        (log:error "Failed to retrieve system properties for Java instance:" java-instance))))
 
 (defun default-java ()
   (make-instance 'java-install :name "java" :arch "unknown" :path "java"))
 
-;; Not downloading the DTD speeds up this thing a lot, if I need it I could cache it so it only waits for it on the first try
+;; Not downloading the DTD speeds up this up a lot, we could cache it so it only waits for it on the first try
 (defun parse-java-system-properties-to-hashtable (sysprop-stream) ;TODO Add a way of passing a list of keys to optimize search (normally we only want 2 or 3 keys)
   ;; (declare (optimize (speed 3) (safety 0)))
   (let ((ht (make-hash-table :test 'equal))

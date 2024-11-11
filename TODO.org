@@ -123,7 +123,7 @@ Our final goal is to be able to download and install minecraft server binnaries 
 
 *** TODO Downloading and managing mods/modpacks
 
-* TODO Logging
+* PROG Logging
 
 ** TODO Parse and log Minecraft errors
 

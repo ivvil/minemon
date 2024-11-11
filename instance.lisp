@@ -34,6 +34,7 @@
 	(run-minecraft (java instance) jar-path :memory (memory instance) :args (args instance))))
 
 (defun run-minecraft (java minecraft-jar &key (memory 0 memory-p) (args ""))
+  (log:info "Running minecraft ~A with java ~A and args ~A" minecraft-jar java args)
   (let* ((memory (princ-to-string memory))
 		 (memarg (if memory-p
 					 (concatenate 'string "-Xmx " memory "M " "-Xms " memory "M")
@@ -44,6 +45,13 @@
 					  ,(princ-to-string minecraft-jar) " "
 					  ,javarg)
 					:output :stream)))
+
+(defmethod print-object ((obj minecraft-instance) stream)
+  (with-accessors ((name name)
+				   (jar jar)
+				   (java java))
+	  obj
+	  (format stream "Instance: ~A with jar: ~A and java: ~A" name jar java)))
 
 (defmethod m-equal ((x minecraft-instance) (y minecraft-instance))
   (string= (name x) (name y)))

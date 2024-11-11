@@ -166,6 +166,7 @@ INSTANCES is the ammount of instances to account for"
          (statm-string (with-open-file (stream statm-path :direction :input)
 						 (read-line stream)))
 		 (statm-data (mapcar #'parse-integer (split-sequence #\Space statm-string))))
+	(log:trace "Got ram usage of pid: ~A ~A" pid (* (second statm-data) (get-pagesize)))
 	(* (second statm-data)
 	   (get-pagesize))))
 
