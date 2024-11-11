@@ -14,11 +14,11 @@
 			   :parse-float
 			   :split-sequence
 			   :cffi
-			   :minemon-system)						
+			   :minemon/system
+			   :log4cl)						
   :components ((:file "package")
                (:file "minemon")
 			   (:file "config")
-			   (:file "system")
 			   (:file "watchdog")
 			   (:file "java")
 			   (:file "instance")))

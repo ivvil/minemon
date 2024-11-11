@@ -1,6 +1,6 @@
 ;;;; package.lisp
 
-(defpackage #:dev.shft.minenon.system
+(defpackage #:dev.shft.minemon/system
   (:use #:cl
 		#:org.shirakumo.machine-state
 		#:uiop

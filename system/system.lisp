@@ -1,6 +1,6 @@
 ;;;; system.lisp
 
-(in-package #:dev.shft.minemon.system)
+(in-package #:dev.shft.minemon/system)
 
 (defparameter *reserved-system-memory* 0.5
   "Percentage of memory that will be left for the system when calculating recommended memory sizes")
