@@ -18,10 +18,30 @@
 
 (defmethod get-versions ((server server))
   (let ((manifest (cl-json:decode-json-from-string (dex:get (url server)))))
-	(decode-mine-version-manfest manifest)))
+	(slot-value (decode-mine-version-manfest manifest) 'versions)))
+
+(defgeneric get-latest (downloadable))
+
+(defmethod get-latest ((downloadable downloadable))
+  (url downloadable))
+
+(defmethod get-latest ((downloadable server))
+  (let ((manifest (cl-json:decode-json-from-string (dex:get (url downloadable)))))
+	(slot-value (decode-mine-version-manfest manifest) 'latest)))
+
+(defgeneric get-version (downloadable &optional version))
+
+(defmethod get-version ((downloadable downloadable) &optional version)
+  (get-latest downloadable))
+
+(defmethod get-version ((downloadable server) &optional version)
+  (if (boundp version)
+	  ))
 
 (define-json-expander:define-json-expander mine-version-manfest ()
-  ((versions
+  ((latest
+	:json-decoder #'decode-mine-latest)
+   (versions
 	:json-decoder (lambda (x)
 					(loop for obj in x
 						  collect (decode-mine-versions obj))))))
@@ -32,3 +52,7 @@
    (url)
    (date :json-prop :time)
    (release-time)))
+
+(define-json-expander:define-json-expander mine-latest ()
+  ((release)
+   (snapshot)))
