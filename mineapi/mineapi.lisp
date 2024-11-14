@@ -29,22 +29,22 @@
   (let ((manifest (cl-json:decode-json-from-string (dex:get (url downloadable)))))
 	(slot-value (decode-mine-version-manfest manifest) 'latest)))
 
-(defgeneric get-version (downloadable &optional version))
+(defgeneric get-version (downloadable version))
 
-(defmethod get-version ((downloadable downloadable) &optional version)
-  (get-latest downloadable))
-
-(defmethod get-version ((downloadable server) &optional version)
-  (if (boundp version)
-	  ))
+(defmethod get-version ((downloadable server) version)
+  (let ((versions (get-versions downloadable)))
+	(gethash version versions)))
 
 (define-json-expander:define-json-expander mine-version-manfest ()
   ((latest
 	:json-decoder #'decode-mine-latest)
    (versions
 	:json-decoder (lambda (x)
-					(loop for obj in x
-						  collect (decode-mine-versions obj))))))
+					(let ((version-table (make-hash-table :test 'equal)))					  
+					  (loop for obj in x
+							for version = (decode-mine-versions obj)
+							do (setf (gethash (slot-value version 'id) version-table) version))
+					  version-table)))))
 
 (define-json-expander:define-json-expander mine-versions ()
   ((id)
