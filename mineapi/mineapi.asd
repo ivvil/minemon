@@ -6,6 +6,7 @@
   :serial t
   :depends-on (:dexador
 			   :cl-json
-			   :define-json-expander)
+			   :define-json-expander
+			   :trivial-download)
   :components ((:file "package")
 			   (:file "mineapi")))

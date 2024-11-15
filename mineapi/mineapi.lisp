@@ -4,7 +4,7 @@
 
 (defclass downloadable ()
   ((display-name
-	:reader display-name
+	:reader name
 	:initarg :name)
    (url
 	:accessor url
@@ -18,16 +18,16 @@
 
 (defmethod get-versions ((server server))
   (let ((manifest (cl-json:decode-json-from-string (dex:get (url server)))))
-	(slot-value (decode-mine-version-manfest manifest) 'versions)))
+	(versions (decode-mine-version-manfest manifest))))
 
-(defgeneric get-latest (downloadable))
+(defgeneric get-latest (downloadable))  ;TODO: Think if this function is needed
 
 (defmethod get-latest ((downloadable downloadable))
   (url downloadable))
 
 (defmethod get-latest ((downloadable server))
   (let ((manifest (cl-json:decode-json-from-string (dex:get (url downloadable)))))
-	(slot-value (decode-mine-version-manfest manifest) 'latest)))
+	(latest (decode-mine-version-manfest manifest))))
 
 (defgeneric get-version (downloadable version))
 
@@ -35,24 +35,56 @@
   (let ((versions (get-versions downloadable)))
 	(gethash version versions)))
 
+(defgeneric download (downloadable path &key quiet))
+
+(defmethod download ((downloadable downloadable) path &key quiet)
+  (dl:download (url downloadable) path :quiet quiet))
+
 (define-json-expander:define-json-expander mine-version-manfest ()
   ((latest
+	:accessor latest
 	:json-decoder #'decode-mine-latest)
    (versions
+	:accessor versions
 	:json-decoder (lambda (x)
 					(let ((version-table (make-hash-table :test 'equal)))					  
 					  (loop for obj in x
 							for version = (decode-mine-versions obj)
-							do (setf (gethash (slot-value version 'id) version-table) version))
+							do (setf (gethash (name version) version-table) version))
 					  version-table)))))
 
-(define-json-expander:define-json-expander mine-versions ()
-  ((id)
-   (type)
-   (url)
-   (date :json-prop :time)
-   (release-time)))
+(define-json-expander:define-json-expander mine-versions (downloadable)
+  ((display-name
+	:json-prop :id
+	:accessor name)
+   (type
+	:accessor type)
+   (url
+	:accessor url)
+   (date
+	:json-prop :time
+	:accessor date)
+   (release-date
+	:json-prop :release-time
+	:accessor release-date)))
 
 (define-json-expander:define-json-expander mine-latest ()
-  ((release)
-   (snapshot)))
+  ((release
+	:accessor release)
+   (snapshot
+	:accessor snapshot)))
+
+(defun save-stream-to-file (stream output-path &key (buffer-size 4096))
+  "Saves the data from STREAM to a file at OUTPUT-PATH using a buffer."
+  (with-open-file (out-stream output-path
+                    :direction :output
+                    :if-exists :supersede
+                    :if-does-not-exist :create
+                    :element-type '(unsigned-byte 8)) ; Raw binary stream
+    (let ((buffer (make-array buffer-size :element-type '(unsigned-byte 8))))
+      (loop
+        with bytes-read
+        do (setf bytes-read (read-sequence buffer stream))
+        while (> bytes-read 0)
+        do (write-sequence buffer out-stream :end bytes-read)))))
+
