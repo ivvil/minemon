@@ -12,12 +12,19 @@
 
 (defclass versionable () ())
 
-(defclass server (downloadable versionable) ())
+(defclass game-version (downloadable versionable) ())
 
-(defgeneric get-versions (server))
+(defclass loader-version (downloadable versionable) ())
 
-(defmethod get-versions ((server server))
-  (let ((manifest (cl-json:decode-json-from-string (dex:get (url server)))))
+(defclass version-manifest ()
+  ((versions
+	:initarg :versions
+	:accessor versions)))
+
+(defgeneric get-versions (game-version))
+
+(defmethod get-versions ((game-version game-version))
+  (let ((manifest (json:decode-json-from-string (dex:get (url game-version)))))
 	(versions (decode-mine-version-manfest manifest))))
 
 (defgeneric get-latest (downloadable))  ;TODO: Think if this function is needed
@@ -25,13 +32,13 @@
 (defmethod get-latest ((downloadable downloadable))
   (url downloadable))
 
-(defmethod get-latest ((downloadable server))
-  (let ((manifest (cl-json:decode-json-from-string (dex:get (url downloadable)))))
+(defmethod get-latest ((downloadable game-version))
+  (let ((manifest (json:decode-json-from-string (dex:get (url downloadable)))))
 	(latest (decode-mine-version-manfest manifest))))
 
 (defgeneric get-version (downloadable version))
 
-(defmethod get-version ((downloadable server) version)
+(defmethod get-version ((downloadable game-version) version)
   (let ((versions (get-versions downloadable)))
 	(gethash version versions)))
 
@@ -87,4 +94,7 @@
         do (setf bytes-read (read-sequence buffer stream))
         while (> bytes-read 0)
         do (write-sequence buffer out-stream :end bytes-read)))))
+
+
+
 
